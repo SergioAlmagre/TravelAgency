@@ -8,6 +8,8 @@ namespace TravelAgency
         {
             InitializeComponent();
             listBoxNameImages.SelectedIndexChanged += listBoxNameImages_SelectedIndexChanged;
+            pictureBox1.Image = imageList.Images[0];
+            listBoxNameImages.SelectedIndex = 0;
         }
 
         private void listBoxNameImages_SelectedIndexChanged(object sender, EventArgs e)
