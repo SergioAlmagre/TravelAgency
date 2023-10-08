@@ -467,6 +467,7 @@
             Name = "PrincipalFrom";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Form1";
+            Load += PrincipalFrom_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             toolStripUp.ResumeLayout(false);

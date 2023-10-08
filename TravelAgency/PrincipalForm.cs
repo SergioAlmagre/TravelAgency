@@ -9,13 +9,15 @@ namespace TravelAgency
     {
         ControlPanel controlPrices = ControlPanel.getInstance();
         Boolean calculate = false;
+
         int priceStay = 0;
         int priceStar = 0;
         int priceNumberPeople = 0;
         int priceDestination = 0;
         int priceActivities = 0;
-        int priceSeasson = 0;
+        int priceDays = 0;
         int pricePerson = 0;
+        int numberOfDaysInt = 0;
 
         String destinationChoosedStr = "";
         String activitieChoosedStr = "";
@@ -23,6 +25,7 @@ namespace TravelAgency
         String numberPeopleChoosedStr = "";
         String numberStarChoosedStr = "";
         String nameSeasson = "";
+        String numberOfDays = "";
         String cadFinal = "";
 
         String cadDestination = "";
@@ -31,6 +34,7 @@ namespace TravelAgency
         String cadStar = "";
         String cadActi = "";
         String cadSeasson = "";
+        String cadDays = "";
         String cadTotal = "";
 
         DateTime travelDate = DateTime.Now;
@@ -52,6 +56,11 @@ namespace TravelAgency
             priceNumberPeople = (int)(pricePerson * numericUpDownPeople.Value);
 
             rboOnlySleep.Checked = true;
+
+            if (!calculate)
+            {
+                btnValidate.Enabled = false;
+            }
 
         }
 
@@ -159,12 +168,17 @@ namespace TravelAgency
         {
             travelDate = monthCalendar.SelectionStart;
             int travelMonth = travelDate.Month;
+            DateTime dayStart = monthCalendar.SelectionStart;
+            DateTime dayEnd = monthCalendar.SelectionEnd;
+            TimeSpan totalDays = dayEnd - dayStart;
+
+            numberOfDaysInt = (int)(totalDays.TotalDays)+1;
 
             foreach (int h in hightSeason)
             {
                 if (travelMonth == h)
                 {
-                    int.TryParse(controlPrices.txtHight.Text, out priceSeasson);
+                    int.TryParse(controlPrices.txtHight.Text, out priceDays);
                     nameSeasson = "Hight season";
                     break;
                 }
@@ -172,7 +186,7 @@ namespace TravelAgency
                 {
                     if (travelMonth == m)
                     {
-                        int.TryParse(controlPrices.txtMid.Text, out priceSeasson);
+                        int.TryParse(controlPrices.txtMid.Text, out priceDays);
                         nameSeasson = "Mid season";
                         break;
                     }
@@ -180,7 +194,7 @@ namespace TravelAgency
                     {
                         if (travelMonth == l)
                         {
-                            int.TryParse(controlPrices.txtLow.Text, out priceSeasson);
+                            int.TryParse(controlPrices.txtLow.Text, out priceDays);
                             nameSeasson = "Low season";
                             break;
                         }
@@ -188,7 +202,7 @@ namespace TravelAgency
 
                 }
             }
-
+            priceDays *= numberOfDaysInt;
         }
 
         private void groupBoxTypeStay_Enter(object sender, EventArgs e)
@@ -238,17 +252,18 @@ namespace TravelAgency
 
             String intro = "\r\n";
             String eu = "€";
-            int total = priceDestination + priceStay + priceNumberPeople + priceStar + priceActivities + priceSeasson;
+            int total = priceDestination + priceStay + priceNumberPeople + priceStar + priceActivities + priceDays;
 
             cadDestination = "Destination: " + destinationChoosedStr + " Price: " + priceDestination.ToString() + eu + intro;
             cadStay = "Type of stay: " + stayChoosedStr + " Price: " + priceStay.ToString() + eu + intro;
             cadPeople = "Number of people: " + numberPeopleChoosedStr + " Price: " + priceNumberPeople + eu + intro;
             cadStar = "Number of stars: " + numberStarChoosedStr + " Price: " + priceStar + eu + intro;
             cadActi = "Activities: " + activitieChoosedStr + " Price " + priceActivities + eu + intro;
-            cadSeasson = "Seasson: " + nameSeasson + " Price " + priceSeasson + eu + intro + intro;
+            cadSeasson = "Seasson: " + nameSeasson + " Number of days: " + numberOfDaysInt +  " Price " + priceDays + eu + intro + intro;
             cadTotal = "Total:___________ " + total + eu;
 
             calculate = true;
+            btnValidate.Enabled = true;
         }
 
 
@@ -334,6 +349,8 @@ namespace TravelAgency
 
         private void btnValidate_Click(object sender, EventArgs e)
         {
+            txtBoxResum.Text = "Congratulations! your next trip is reserved";
+            btnValidate.Enabled = false;
 
         }
 
@@ -348,6 +365,11 @@ namespace TravelAgency
 
             //string comando = $"mailto:{destinatario}?subject={asunto}";
             //Process.Start(new ProcessStartInfo(comando));
+        }
+
+        private void PrincipalFrom_Load(object sender, EventArgs e)
+        {
+             
         }
     }
 }
